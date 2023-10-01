@@ -6,6 +6,8 @@ from datetime import datetime
 from joblib import Parallel, delayed
 from multiprocessing import cpu_count
 
+import random
+
 
 methods_list = ["Plurality", "Run off", "D21+", "D21-", "Approval",
                 "IRV",
@@ -49,13 +51,17 @@ def scenario(number_of_iterations, scenario_no, number_of_candidates, number_of_
 
 if __name__ == '__main__':
     print("calculation starts")
+    random.seed(161803398874)
+
     start_time = datetime.now()
+    print(start_time)
 
     candidates_scenarios = [3, 11]
     voters_scenarios = [10, 11, 100, 101]
     iterations = 121000
 
-    cpu_no = cpu_count()
+    "for multiprocessing cpu_no=cpu_count()"
+    cpu_no = 1
     if cpu_no > iterations:
         cpu_no = 1
 

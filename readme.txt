@@ -19,7 +19,7 @@ To run the project and generate the results, Run the run.py script.
 After running the script, the results will be stored in an Excel file named D21_comparison_data.xlsx within the same project folder.
 
 Important Notes
-Seed Not Used: Please note that a seed was not used during the analysis. As a result, running the project may produce slightly different results each time.
+Seed Used: Please note that a seed was used during the analysis (random.seed(161803398874)).Running the project should reproduce the results each time.
 
 Data Used: The Excel file used for the analysis can be found in the same directory as D21_comparison_data_used.xlsx. This file contains the data used in the project.
 
