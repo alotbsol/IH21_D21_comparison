@@ -1,3 +1,4 @@
+# imports
 import itertools
 import random
 from math import ceil
@@ -19,7 +20,7 @@ def x_votes(input_rankings, number_of_votes, max_votes=100):
         winner = [iii for iii, j in enumerate(votes_storage) if j == winner_votes]
         winner = [x + 1 for x in winner]
     else:
-        winner = "nan"
+        winner = ["nan"]
 
     return winner
 
@@ -327,3 +328,38 @@ def irv(input_voters_rankings, number_of_candidates):
         winner = [y + 1 for y in winner]
 
     return winner
+
+
+def majority_winner(input_rankings, number_of_voters):
+    votes_storage = []
+    for i in input_rankings:
+        votes_storage.append(input_rankings[i][0])
+
+    winner_votes = max(votes_storage)
+    if winner_votes > number_of_voters/2:
+        winner = [iii for iii, j in enumerate(votes_storage) if j == winner_votes]
+        winner = [x + 1 for x in winner]
+
+    else:
+        winner = [0]
+
+    return winner
+
+
+def majority_loser(input_rankings, number_of_voters):
+    votes_storage = []
+    for i in input_rankings:
+        votes_storage.append(input_rankings[i][-1])
+
+    winner_votes = max(votes_storage)
+
+    if winner_votes > number_of_voters / 2:
+        winner = [iii for iii, j in enumerate(votes_storage) if j == winner_votes]
+        winner = [x + 1 for x in winner]
+
+    else:
+        winner = [0]
+
+    return winner
+
+

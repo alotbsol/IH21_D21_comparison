@@ -1,3 +1,5 @@
+import numpy as np
+import pandas as pd
 
 def compare(comparing, comparing_to):
     if isinstance(comparing[0], str) == 1:
@@ -156,5 +158,14 @@ def how_often_chosen(input_list, unique_value):
             x = 0
 
     return x
+
+
+def average_of_lists(input_lists):
+    ar = np.array(input_lists).astype(float)
+    x = np.mean(ar, axis=0)
+    return list(x)
+
+
+
 
 

@@ -7,20 +7,22 @@ from joblib import Parallel, delayed
 from multiprocessing import cpu_count
 
 
-methods_list = ["Plurality", "RunOff", "D21+", "D21-", "Approval", "IRV",
+methods_list = ["Plurality", "Run off", "D21+", "D21-", "Approval",
+                "IRV",
                 "Maj judge 3", "Maj judge 5", "Maj judge 10",
                 "Borda",
                 "Range 3", "Range 5", "Range 10",
                 "Max Utility", "Min Utility",
                 "Condorcet", "Condorcet_loser",
+                "Majority_winner", "Majority_loser",
                 "Random"]
-
 for i in range(2, 11):
     methods_list.append("{0}Vote_Fix".format(i))
 for i in range(2, 12):
     methods_list.append("{0}Vote_Var".format(i))
 
-Master_storage = Storage(methods_list=methods_list, name="Scenario_testing")
+hist_bins_no = 10
+Master_storage = Storage(methods_list=methods_list, name="D21_comparison_data", hist_bins=hist_bins_no)
 
 
 def scenario(number_of_iterations, scenario_no, number_of_candidates, number_of_voters,
@@ -28,7 +30,7 @@ def scenario(number_of_iterations, scenario_no, number_of_candidates, number_of_
     Master_storage.create_process(process_no=scenario_no)
 
     for rounds in range(number_of_iterations):
-        candidate_store = CandidatesStore(number_of_voters=number_of_voters)
+        candidate_store = CandidatesStore(number_of_voters=number_of_voters, hist_bins=hist_bins_no)
         for can in range(number_of_candidates):
             candidate_store.add_candidate(distribution=distributions[can],
                                           alpha=alphas[can],
@@ -36,21 +38,29 @@ def scenario(number_of_iterations, scenario_no, number_of_candidates, number_of_
 
         candidate_store.voters_preferences()
         candidate_store.results_one_round()
-        Master_storage.one_round_process(data_in=candidate_store.temp_results, process_no=scenario_no)
+        candidate_store.store_histograms()
+
+        Master_storage.one_round_process(data_in=candidate_store.temp_results,
+                                         data_in_hist=candidate_store.temp_results_histograms,
+                                         data_in_ut=candidate_store.temp_results_utility,
+                                         data_in_winners=candidate_store.temp_results_winners,
+                                         process_no=scenario_no)
 
 
 if __name__ == '__main__':
     print("calculation starts")
     start_time = datetime.now()
 
-    candidates_scenarios = [7]
-    voters_scenarios = [12]
-    iterations = 21
+    candidates_scenarios = [3, 11]
+    voters_scenarios = [10, 11, 100, 101]
+    iterations = 121000
 
     cpu_no = cpu_count()
+    if cpu_no > iterations:
+        cpu_no = 1
 
     for i in candidates_scenarios:
-        pdfs = ["B"] * i
+        pdfs = ["R"] * i
         alpha_parameters = [1] * i
         beta_parameters = [1] * i
 
