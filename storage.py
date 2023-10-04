@@ -8,14 +8,12 @@ import fun
 
 
 class Storage:
-    def __init__(self, methods_list, name="Project", hist_bins=10):
+    def __init__(self, methods_list, name="Project"):
         self.name = name
         self.start_time = datetime.now()
         self.methods_list = methods_list
-        self.hist_bins = hist_bins
 
         self.data_rounds = {}
-        self.data_rounds_hist = {}
         self.data_rounds_ut = {}
         self.data_rounds_winners = {}
 
@@ -36,10 +34,6 @@ class Storage:
                            "Multiple winners": [],
                            }
 
-        self.statistics_full_hist = {"Candidates": [],
-                                     "Voters": [],
-                                     "PDF": [],
-                                     "Method": []}
         self.statistics_full_ut = {"Candidates": [],
                                      "Voters": [],
                                      "PDF": [],
@@ -47,7 +41,6 @@ class Storage:
 
     def set_data_rounds(self):
         self.data_rounds = {}
-        self.data_rounds_hist = {}
         self.data_rounds_ut = {}
         self.data_rounds_winners = {}
 
@@ -57,14 +50,11 @@ class Storage:
 
         for i in self.methods_list:
             self.data_rounds[i] = []
-            self.data_rounds_hist[i] = []
             self.data_rounds_ut[i] = []
             self.data_rounds_winners[i] = []
 
-
     def create_process(self, process_no=1):
         self.data_rounds[process_no] = {}
-        self.data_rounds_hist[process_no] = {}
         self.data_rounds_ut[process_no] = {}
         self.data_rounds_winners[process_no] = {}
 
@@ -74,16 +64,12 @@ class Storage:
 
         for i in self.methods_list:
             self.data_rounds[process_no][i] = []
-            self.data_rounds_hist[process_no][i] = []
             self.data_rounds_ut[process_no][i] = []
             self.data_rounds_winners[process_no][i] = []
 
-    def one_round_process(self, data_in, data_in_hist, data_in_ut, data_in_winners, process_no=1, ):
+    def one_round_process(self, data_in, data_in_ut, data_in_winners, process_no=1, ):
         for i in data_in:
             self.data_rounds[process_no][i].append(data_in[i])
-
-        for i in data_in_hist:
-            self.data_rounds_hist[process_no][i].append(data_in_hist[i])
 
         for i in data_in_ut:
             self.data_rounds_ut[process_no][i].append(data_in_ut[i])
@@ -93,7 +79,6 @@ class Storage:
 
     def merge_processes(self):
         copy_dict = self.data_rounds.copy()
-        copy_dict_hist = self.data_rounds_hist.copy()
         copy_dict_ut = self.data_rounds_ut.copy()
         copy_dict_winners = self.data_rounds_winners.copy()
         self.set_data_rounds()
@@ -102,11 +87,6 @@ class Storage:
             for ii in copy_dict[i]:
                 for iii in copy_dict[i][ii]:
                     self.data_rounds[ii].append(iii)
-
-        for i in copy_dict_hist:
-            for ii in copy_dict_hist[i]:
-                for iii in copy_dict_hist[i][ii]:
-                    self.data_rounds_hist[ii].append(iii)
 
         for i in copy_dict_ut:
             for ii in copy_dict_ut[i]:
@@ -156,25 +136,6 @@ class Storage:
                 self.statistics.setdefault("C{0}chosen".format(ii), []).append(fun.how_often_chosen(
                     input_list=self.data_rounds[i], unique_value=ii))
 
-            # creates average of lists of all itterations
-            histogram_list = fun.average_of_lists(input_lists=self.data_rounds_hist[i])
-
-            # assign values to histogram bins
-            for ii in range(len(histogram_list)):
-                self.statistics.setdefault("Hist{0}".format(ii+1), []).append(histogram_list[ii])
-
-
-            # save all histogram data
-            self.statistics_full_hist["Candidates"].append(self.data_rounds["Candidates"][0])
-            self.statistics_full_hist["Voters"].append(self.data_rounds["Voters"][0])
-            self.statistics_full_hist["PDF"].append(self.data_rounds["PDF"][0])
-            self.statistics_full_hist["Method"].append(i)
-
-            for ii in range(self.hist_bins):
-                appending_hist = []
-                for iii in self.data_rounds_hist[i]:
-                    appending_hist.append(iii[ii])
-                self.statistics_full_hist.setdefault("Hist{0}".format(ii+1), []).append(appending_hist)
 
             # save all utility data
             self.statistics_full_ut["Candidates"].append(self.data_rounds["Candidates"][0])
@@ -186,6 +147,11 @@ class Storage:
             # chain.from_iterable(A)
 
         self.set_data_rounds()
+
+    def return_df_all(self):
+        df_all = pd.DataFrame.from_dict(self.statistics)
+
+        return df_all
 
     def export(self, start, end):
         writer = pd.ExcelWriter("{0}.xlsx".format(self.name), engine="xlsxwriter")

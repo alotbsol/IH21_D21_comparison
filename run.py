@@ -23,8 +23,7 @@ for i in range(2, 11):
 for i in range(2, 12):
     methods_list.append("{0}Vote_Var".format(i))
 
-hist_bins_no = 10
-Master_storage = Storage(methods_list=methods_list, name="D21_comparison_data", hist_bins=hist_bins_no)
+Master_storage = Storage(methods_list=methods_list, name="D21_comparison_data")
 
 
 def scenario(number_of_iterations, scenario_no, number_of_candidates, number_of_voters,
@@ -32,7 +31,7 @@ def scenario(number_of_iterations, scenario_no, number_of_candidates, number_of_
     Master_storage.create_process(process_no=scenario_no)
 
     for rounds in range(number_of_iterations):
-        candidate_store = CandidatesStore(number_of_voters=number_of_voters, hist_bins=hist_bins_no)
+        candidate_store = CandidatesStore(number_of_voters=number_of_voters)
         for can in range(number_of_candidates):
             candidate_store.add_candidate(distribution=distributions[can],
                                           alpha=alphas[can],
@@ -40,10 +39,8 @@ def scenario(number_of_iterations, scenario_no, number_of_candidates, number_of_
 
         candidate_store.voters_preferences()
         candidate_store.results_one_round()
-        candidate_store.store_histograms()
 
         Master_storage.one_round_process(data_in=candidate_store.temp_results,
-                                         data_in_hist=candidate_store.temp_results_histograms,
                                          data_in_ut=candidate_store.temp_results_utility,
                                          data_in_winners=candidate_store.temp_results_winners,
                                          process_no=scenario_no)
