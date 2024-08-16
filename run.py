@@ -8,7 +8,6 @@ from multiprocessing import cpu_count
 
 import random
 
-
 methods_list = ["Plurality", "Run off", "D21+", "D21-", "Approval",
                 "IRV",
                 "Maj judge 3", "Maj judge 5", "Maj judge 10",
@@ -18,9 +17,9 @@ methods_list = ["Plurality", "Run off", "D21+", "D21-", "Approval",
                 "Condorcet", "Condorcet_loser",
                 "Majority_winner", "Majority_loser",
                 "Random"]
-for i in range(2, 11):
+for i in range(2, 9):
     methods_list.append("{0}Vote_Fix".format(i))
-for i in range(2, 12):
+for i in range(2, 10):
     methods_list.append("{0}Vote_Var".format(i))
 
 Master_storage = Storage(methods_list=methods_list, name="D21_comparison_data")
@@ -53,8 +52,8 @@ if __name__ == '__main__':
     start_time = datetime.now()
     print(start_time)
 
-    candidates_scenarios = [3, 11]
-    voters_scenarios = [10, 11, 100, 101]
+    candidates_scenarios = [3, 4, 9]
+    voters_scenarios = [10, 11, 100, 101, 500, 501]
     iterations = 1212121
 
     "for multiprocessing cpu_no=cpu_count()"
