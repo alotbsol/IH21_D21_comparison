@@ -185,19 +185,23 @@ class CandidatesStore:
         self.temp_results["IRV"] = v_methods.irv(input_voters_rankings=self.voters["Ranking"],
                                                  number_of_candidates=self.number_of_candidates)
 
+        """
         self.temp_results["Maj judge 3"] = v_methods.majority_judgement(input_utility=self.candidates["Utility"],
                                                                         scale=3,
                                                                         number_of_candidates=self.number_of_candidates)
+        """
         self.temp_results["Maj judge 5"] = v_methods.majority_judgement(input_utility=self.candidates["Utility"],
                                                                         scale=5,
                                                                         number_of_candidates=self.number_of_candidates)
+        """
         self.temp_results["Maj judge 10"] = v_methods.majority_judgement(input_utility=self.candidates["Utility"],
                                                                          scale=10,
                                                                          number_of_candidates=self.number_of_candidates)
+        """
 
         self.temp_results["Borda"] = v_methods.borda(input_rankings=self.candidates["Ranking"],
                                                      number_of_candidates=self.number_of_candidates)
-
+        """
         self.temp_results["Range 3"] = v_methods.range_voting(input_utility=self.candidates["Utility"],
                                                               scale=3,
                                                               number_of_candidates=self.number_of_candidates)
@@ -207,10 +211,14 @@ class CandidatesStore:
         self.temp_results["Range 10"] = v_methods.range_voting(input_utility=self.candidates["Utility"],
                                                                scale=10,
                                                                number_of_candidates=self.number_of_candidates)
+        """
 
         self.temp_results["Max Utility"] = v_methods.max_utility(input_utility=self.candidates["Utility"])
         self.temp_results["Min Utility"] = v_methods.min_utility(input_utility=self.candidates["Utility"])
+
+        """
         self.temp_results["Random"] = [randint(1, self.number_of_candidates)]
+        """
 
         self.temp_results["Condorcet"] = v_methods.condorcet_calculation(input_utility=self.voters["Utility"],
                                                                          number_of_candidates=self.number_of_candidates,
@@ -228,7 +236,7 @@ class CandidatesStore:
         self.temp_results["Majority_loser"] = v_methods.majority_loser(input_rankings=self.candidates["Ranking"],
                                                                        number_of_voters=self.number_of_voters)
 
-
+        """
         for i in range(2, 9):
             self.temp_results["{0}Vote_Fix".format(i)] = v_methods.x_votes(input_rankings=self.candidates["Ranking"],
                                                                            number_of_votes=i,
@@ -238,3 +246,4 @@ class CandidatesStore:
             self.temp_results["{0}Vote_Var".format(i)] = v_methods.x_votes(input_rankings=self.candidates["Variable_Ranking"],
                                                                            number_of_votes=i,
                                                                            max_votes=self.number_of_candidates + 1)
+        """
