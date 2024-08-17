@@ -68,7 +68,6 @@ if __name__ == '__main__':
     candidates_scenarios = [3, 4, 9]
     voters_scenarios = [10, 11, 50, 51, 100, 101, 500, 501]
     iterations = 1212121
-    iterations = 121
 
     "for multiprocessing cpu_no=cpu_count()"
     cpu_no = 1
